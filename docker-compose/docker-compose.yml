@@ -1,0 +1,32 @@
+---
+version: '3'
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELK_VERSION}
+    container_name: elasticsearch
+    ports: ['9200:9200','9300:9300']
+    volumes:
+          - /Users/nwm/Work/docker/elk-docker/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+          - /Users/nwm/Work/docker/elk-docker/elasticsearch/config/jvm.options:/usr/share/elasticsearch/config/jvm.options
+          - /Users/nwm/Work/docker/elk-docker/elasticsearch/logs/:/usr/share/elasticsearch/logs/
+          - /Users/nwm/Work/docker/elk-docker/elasticsearch/data/:/usr/share/elasticsearch/data/
+    networks: ['elk_stack_network']
+  kibana:
+    image: docker.elastic.co/kibana/kibana:${ELK_VERSION}
+    container_name: kibana
+    ports: ['5601:5601']
+    volumes:
+          - /Users/nwm/Work/docker/elk-docker/kibana/config/:/usr/share/kibana/config/
+          - /Users/nwm/Work/docker/elk-docker/kibana/logs/:/usr/share/kibana/logs/
+    networks: ['elk_stack_network']
+  logstash:
+    image: docker.elastic.co/logstash/logstash:${ELK_VERSION}
+    container_name: logstash
+    ports: ['5044:5044','9600:9600','5140:5140','5140:5140/udp']
+    volumes:
+          - /Users/nwm/Work/docker/elk-docker/logstash/config/:/usr/share/logstash/config/
+          - /Users/nwm/Work/docker/elk-docker/logstash/logs/:/usr/share/logstash/logs/
+    networks: ['elk_stack_network']
+
+networks: {elk_stack_network: {}}
+
